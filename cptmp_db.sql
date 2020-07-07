@@ -18,12 +18,14 @@ create table if not exists cptmp_user
         primary key,
     gmt_create   datetime         not null,
     gmt_modified datetime         null,
-    password     varchar(20)      not null,
-    nickname     varchar(20)      not null,
     introduction text             null,
     contact_info varchar(200)     null,
     gender       tinyint unsigned null,
-    avatar       varchar(200)     null
+    avatar       varchar(200)     null,
+    uk_username  varchar(20)      not null,
+    idx_password varchar(20)      not null,
+    constraint uk_username
+        unique (uk_username)
 );
 
 create table if not exists enterprise_admin

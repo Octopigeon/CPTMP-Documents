@@ -1,186 +1,120 @@
--- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
---
--- Host: localhost    Database: cptmp_db
--- ------------------------------------------------------
--- Server version	8.0.19
+create table if not exists authority
+(
+    id             bigint unsigned auto_increment
+        primary key,
+    gmt_create     datetime    not null,
+    gmt_modified   datetime    null,
+    uk_name        varchar(45) not null,
+    operation      varchar(45) not null comment '''不同权限之间用英文逗号隔开''',
+    idx_table_name varchar(20) not null,
+    constraint uk_name_UNIQUE
+        unique (uk_name)
+)
+    comment '对数据库所有表的权限管理';
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+create table if not exists cptmp_user
+(
+    id           bigint unsigned auto_increment
+        primary key,
+    gmt_create   datetime         not null,
+    gmt_modified datetime         null,
+    password     varchar(20)      not null,
+    nickname     varchar(20)      not null,
+    introduction text             null,
+    contact_info varchar(200)     null,
+    gender       tinyint unsigned null,
+    avatar       varchar(200)     null
+);
 
---
--- Table structure for table `authority`
---
+create table if not exists enterprise_admin
+(
+    id             bigint unsigned auto_increment
+        primary key,
+    gmt_create     datetime        not null,
+    gmt_modified   datetime        null,
+    idx_name       varchar(20)     not null,
+    uk_user_id     bigint unsigned not null,
+    uk_employee_id bigint          not null,
+    constraint uk_employee_id
+        unique (uk_employee_id),
+    constraint uk_user_id
+        unique (uk_user_id),
+    constraint enterprise_admin_ibfk_1
+        foreign key (uk_user_id) references cptmp_user (id)
+);
 
-DROP TABLE IF EXISTS `authority`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `authority` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `uk_name` varchar(45) NOT NULL,
-  `operation` varchar(45) NOT NULL COMMENT '''不同权限之间用英文逗号隔开''',
-  `idx_table_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name_UNIQUE` (`uk_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='对数据库所有表的权限管理';
-/*!40101 SET character_set_client = @saved_cs_client */;
+create table if not exists school_instructor
+(
+    id              bigint unsigned auto_increment
+        primary key,
+    gmt_create      datetime        not null,
+    gmt_modified    datetime        null,
+    idx_name        varchar(20)     not null,
+    uk_user_id      bigint unsigned not null,
+    uk_employee_id  bigint          null,
+    idx_school_name varchar(20)     not null,
+    constraint uk_employee_id
+        unique (uk_employee_id),
+    constraint uk_user_id
+        unique (uk_user_id),
+    constraint school_instructor_ibfk_1
+        foreign key (uk_user_id) references cptmp_user (id)
+);
 
---
--- Table structure for table `enterprise_admin`
---
+create table if not exists school_student
+(
+    id              bigint unsigned auto_increment
+        primary key,
+    gmt_create      datetime        not null,
+    gmt_modified    datetime        null,
+    idx_name        varchar(20)     not null,
+    idx_school_name varchar(20)     not null,
+    uk_user_id      bigint unsigned not null,
+    uk_student_id   bigint          null,
+    uk_student_face varchar(200)    null,
+    constraint uk_student_id
+        unique (uk_student_id),
+    constraint uk_user_id
+        unique (uk_user_id),
+    constraint school_student_ibfk_1
+        foreign key (uk_user_id) references cptmp_user (id)
+);
 
-DROP TABLE IF EXISTS `enterprise_admin`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `enterprise_admin` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `idx_name` varchar(20) NOT NULL,
-  `uk_user_id` bigint unsigned NOT NULL,
-  `uk_employee_id` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_employee_id` (`uk_employee_id`),
-  UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  CONSTRAINT `enterprise_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create table if not exists test_tb
+(
+    id          int unsigned auto_increment
+        primary key,
+    pigeon_name varchar(20) not null
+)
+    charset = utf8;
 
---
--- Table structure for table `school_instructor`
---
+create table if not exists user_authority
+(
+    id            bigint unsigned auto_increment
+        primary key,
+    gmt_create    datetime        not null,
+    gmt_modified  datetime        null,
+    uk_user_id    bigint unsigned not null,
+    authority_ids varchar(200)    null,
+    constraint uk_user_id_UNIQUE
+        unique (uk_user_id),
+    constraint user_authority_ibfk_1
+        foreign key (uk_user_id) references cptmp_user (id)
+)
+    comment '用户权限表，主要处理异常情况，剥夺某一用户的权限';
 
-DROP TABLE IF EXISTS `school_instructor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `school_instructor` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `idx_name` varchar(20) NOT NULL,
-  `uk_user_id` bigint unsigned NOT NULL,
-  `uk_employee_id` bigint DEFAULT NULL,
-  `idx_school_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  UNIQUE KEY `uk_employee_id` (`uk_employee_id`),
-  CONSTRAINT `teacher_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create table if not exists user_role
+(
+    id            bigint unsigned auto_increment
+        primary key,
+    gmt_create    datetime        not null,
+    gmt_modified  datetime        null,
+    uk_user_id    bigint unsigned not null,
+    idx_role_name varchar(20)     not null,
+    authority_ids varchar(200)    not null,
+    constraint uk_user_id
+        unique (uk_user_id),
+    constraint user_role_ibfk_1
+        foreign key (uk_user_id) references cptmp_user (id)
+);
 
---
--- Table structure for table `school_student`
---
-
-DROP TABLE IF EXISTS `school_student`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `school_student` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `idx_name` varchar(20) NOT NULL,
-  `idx_school_name` varchar(20) NOT NULL,
-  `uk_user_id` bigint unsigned NOT NULL,
-  `uk_student_id` bigint DEFAULT NULL,
-  `uk_student_face` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  UNIQUE KEY `uk_student_id` (`uk_student_id`),
-  CONSTRAINT `stu_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `test_tb`
---
-
-DROP TABLE IF EXISTS `test_tb`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `test_tb` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `pigeon_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `password` varchar(20) NOT NULL,
-  `nickname` varchar(20) NOT NULL,
-  `introduction` text,
-  `contact_info` varchar(200) DEFAULT NULL,
-  `gender` tinyint unsigned DEFAULT NULL,
-  `avatar` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user_authority`
---
-
-DROP TABLE IF EXISTS `user_authority`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_authority` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `uk_user_id` bigint unsigned NOT NULL,
-  `authority_ids` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id_UNIQUE` (`uk_user_id`),
-  CONSTRAINT `authority_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户权限表，主要处理异常情况，剥夺某一用户的权限';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user_role`
---
-
-DROP TABLE IF EXISTS `user_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_role` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `uk_user_id` bigint unsigned NOT NULL,
-  `idx_role_name` varchar(20) NOT NULL,
-  `authority_ids` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  CONSTRAINT `role_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2020-07-07 20:37:09

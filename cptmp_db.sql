@@ -35,15 +35,6 @@ CREATE TABLE `authority` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `authority`
---
-
-LOCK TABLES `authority` WRITE;
-/*!40000 ALTER TABLE `authority` DISABLE KEYS */;
-/*!40000 ALTER TABLE `authority` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `enterprise_admin`
 --
 
@@ -55,22 +46,14 @@ CREATE TABLE `enterprise_admin` (
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime DEFAULT NULL,
   `idx_name` varchar(20) NOT NULL,
-  `uk_user_id` bigint NOT NULL,
+  `uk_user_id` bigint unsigned NOT NULL,
   `uk_employee_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_employee_id` (`uk_employee_id`),
-  UNIQUE KEY `uk_user_id` (`uk_user_id`)
+  UNIQUE KEY `uk_user_id` (`uk_user_id`),
+  CONSTRAINT `enterprise_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `enterprise_admin`
---
-
-LOCK TABLES `enterprise_admin` WRITE;
-/*!40000 ALTER TABLE `enterprise_admin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `enterprise_admin` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `school_instructor`
@@ -84,23 +67,15 @@ CREATE TABLE `school_instructor` (
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime DEFAULT NULL,
   `idx_name` varchar(20) NOT NULL,
-  `uk_user_id` bigint NOT NULL,
+  `uk_user_id` bigint unsigned NOT NULL,
   `uk_employee_id` bigint DEFAULT NULL,
   `idx_school_name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  UNIQUE KEY `uk_employee_id` (`uk_employee_id`)
+  UNIQUE KEY `uk_employee_id` (`uk_employee_id`),
+  CONSTRAINT `teacher_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `school_instructor`
---
-
-LOCK TABLES `school_instructor` WRITE;
-/*!40000 ALTER TABLE `school_instructor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `school_instructor` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `school_student`
@@ -115,23 +90,15 @@ CREATE TABLE `school_student` (
   `gmt_modified` datetime DEFAULT NULL,
   `idx_name` varchar(20) NOT NULL,
   `idx_school_name` varchar(20) NOT NULL,
-  `uk_user_id` bigint NOT NULL,
+  `uk_user_id` bigint unsigned NOT NULL,
   `uk_student_id` bigint DEFAULT NULL,
   `uk_student_face` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  UNIQUE KEY `uk_student_id` (`uk_student_id`)
+  UNIQUE KEY `uk_student_id` (`uk_student_id`),
+  CONSTRAINT `stu_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `school_student`
---
-
-LOCK TABLES `school_student` WRITE;
-/*!40000 ALTER TABLE `school_student` DISABLE KEYS */;
-/*!40000 ALTER TABLE `school_student` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `test_tb`
@@ -148,16 +115,6 @@ CREATE TABLE `test_tb` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `test_tb`
---
-
-LOCK TABLES `test_tb` WRITE;
-/*!40000 ALTER TABLE `test_tb` DISABLE KEYS */;
-INSERT INTO `test_tb` VALUES (3,'lgh'),(4,'JOJO');
-/*!40000 ALTER TABLE `test_tb` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -168,26 +125,15 @@ CREATE TABLE `user` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime DEFAULT NULL,
-  `idx_role_name` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
   `nickname` varchar(20) NOT NULL,
   `introduction` text,
   `contact_info` varchar(200) DEFAULT NULL,
   `gender` tinyint unsigned DEFAULT NULL,
   `avatar` varchar(200) DEFAULT NULL,
-  `authority_ids` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user_authority`
@@ -201,20 +147,12 @@ CREATE TABLE `user_authority` (
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime DEFAULT NULL,
   `uk_user_id` bigint unsigned NOT NULL,
-  `authority_ids` varchar(45) DEFAULT NULL COMMENT '不同权限id之间用英文逗号隔开，在权限id前添加+或-，表示添加某项权限或删除某项权限',
+  `authority_ids` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id_UNIQUE` (`uk_user_id`)
+  UNIQUE KEY `uk_user_id_UNIQUE` (`uk_user_id`),
+  CONSTRAINT `authority_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户权限表，主要处理异常情况，剥夺某一用户的权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_authority`
---
-
-LOCK TABLES `user_authority` WRITE;
-/*!40000 ALTER TABLE `user_authority` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_authority` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user_role`
@@ -227,22 +165,14 @@ CREATE TABLE `user_role` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime DEFAULT NULL,
-  `uk_user_id` bigint NOT NULL,
+  `uk_user_id` bigint unsigned NOT NULL,
   `idx_role_name` varchar(20) NOT NULL,
   `authority_ids` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id` (`uk_user_id`)
+  UNIQUE KEY `uk_user_id` (`uk_user_id`),
+  CONSTRAINT `role_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_role`
---
-
-LOCK TABLES `user_role` WRITE;
-/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -253,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-07 19:39:27
+-- Dump completed on 2020-07-07 20:37:09

@@ -1,122 +1,100 @@
-create table if not exists authority
-(
-    id             bigint unsigned auto_increment
-        primary key,
-    gmt_create     datetime    not null,
-    gmt_modified   datetime    null,
-    uk_name        varchar(45) not null,
-    operation      varchar(45) not null comment '''不同权限之间用英文逗号隔开''',
-    idx_table_name varchar(20) not null,
-    constraint uk_name_UNIQUE
-        unique (uk_name)
-)
-    comment '对数据库所有表的权限管理';
+-- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
+--
+-- Host: localhost    Database: cptmp_db
+-- ------------------------------------------------------
+-- Server version	8.0.19
 
-create table if not exists cptmp_user
-(
-    id           bigint unsigned auto_increment
-        primary key,
-    gmt_create   datetime         not null,
-    gmt_modified datetime         null,
-    introduction text             null,
-    contact_info varchar(200)     null,
-    gender       tinyint unsigned null,
-    avatar       varchar(200)     null,
-    uk_username  varchar(20)      not null,
-    idx_password varchar(20)      not null,
-    constraint uk_username
-        unique (uk_username)
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create table if not exists enterprise_admin
-(
-    id             bigint unsigned auto_increment
-        primary key,
-    gmt_create     datetime        not null,
-    gmt_modified   datetime        null,
-    idx_name       varchar(20)     not null,
-    uk_user_id     bigint unsigned not null,
-    uk_employee_id bigint          not null,
-    constraint uk_employee_id
-        unique (uk_employee_id),
-    constraint uk_user_id
-        unique (uk_user_id),
-    constraint enterprise_admin_ibfk_1
-        foreign key (uk_user_id) references cptmp_user (id)
-);
+--
+-- Dumping data for table `authority`
+--
 
-create table if not exists school_instructor
-(
-    id              bigint unsigned auto_increment
-        primary key,
-    gmt_create      datetime        not null,
-    gmt_modified    datetime        null,
-    idx_name        varchar(20)     not null,
-    uk_user_id      bigint unsigned not null,
-    uk_employee_id  bigint          null,
-    idx_school_name varchar(20)     not null,
-    constraint uk_employee_id
-        unique (uk_employee_id),
-    constraint uk_user_id
-        unique (uk_user_id),
-    constraint school_instructor_ibfk_1
-        foreign key (uk_user_id) references cptmp_user (id)
-);
+LOCK TABLES `authority` WRITE;
+/*!40000 ALTER TABLE `authority` DISABLE KEYS */;
+/*!40000 ALTER TABLE `authority` ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table if not exists school_student
-(
-    id              bigint unsigned auto_increment
-        primary key,
-    gmt_create      datetime        not null,
-    gmt_modified    datetime        null,
-    idx_name        varchar(20)     not null,
-    idx_school_name varchar(20)     not null,
-    uk_user_id      bigint unsigned not null,
-    uk_student_id   bigint          null,
-    uk_student_face varchar(200)    null,
-    constraint uk_student_id
-        unique (uk_student_id),
-    constraint uk_user_id
-        unique (uk_user_id),
-    constraint school_student_ibfk_1
-        foreign key (uk_user_id) references cptmp_user (id)
-);
+--
+-- Dumping data for table `cptmp_user`
+--
 
-create table if not exists test_tb
-(
-    id          int unsigned auto_increment
-        primary key,
-    pigeon_name varchar(20) not null
-)
-    charset = utf8;
+LOCK TABLES `cptmp_user` WRITE;
+/*!40000 ALTER TABLE `cptmp_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cptmp_user` ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table if not exists user_authority
-(
-    id            bigint unsigned auto_increment
-        primary key,
-    gmt_create    datetime        not null,
-    gmt_modified  datetime        null,
-    uk_user_id    bigint unsigned not null,
-    authority_ids varchar(200)    null,
-    constraint uk_user_id_UNIQUE
-        unique (uk_user_id),
-    constraint user_authority_ibfk_1
-        foreign key (uk_user_id) references cptmp_user (id)
-)
-    comment '用户权限表，主要处理异常情况，剥夺某一用户的权限';
+--
+-- Dumping data for table `enterprise_admin`
+--
 
-create table if not exists user_role
-(
-    id            bigint unsigned auto_increment
-        primary key,
-    gmt_create    datetime        not null,
-    gmt_modified  datetime        null,
-    uk_user_id    bigint unsigned not null,
-    idx_role_name varchar(20)     not null,
-    authority_ids varchar(200)    not null,
-    constraint uk_user_id
-        unique (uk_user_id),
-    constraint user_role_ibfk_1
-        foreign key (uk_user_id) references cptmp_user (id)
-);
+LOCK TABLES `enterprise_admin` WRITE;
+/*!40000 ALTER TABLE `enterprise_admin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `enterprise_admin` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `school_instructor`
+--
+
+LOCK TABLES `school_instructor` WRITE;
+/*!40000 ALTER TABLE `school_instructor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school_instructor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `school_student`
+--
+
+LOCK TABLES `school_student` WRITE;
+/*!40000 ALTER TABLE `school_student` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school_student` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `test_tb`
+--
+
+LOCK TABLES `test_tb` WRITE;
+/*!40000 ALTER TABLE `test_tb` DISABLE KEYS */;
+INSERT INTO `test_tb` VALUES (3,'lgh'),(4,'JOJO');
+/*!40000 ALTER TABLE `test_tb` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `user_authority`
+--
+
+LOCK TABLES `user_authority` WRITE;
+/*!40000 ALTER TABLE `user_authority` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_authority` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-07-08  9:33:41

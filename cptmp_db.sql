@@ -18,60 +18,6 @@ USE `cptmp_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `authority`
---
-
-DROP TABLE IF EXISTS `authority`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `authority` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `uk_name` varchar(45) NOT NULL,
-  `operation` varchar(45) NOT NULL COMMENT '''不同权限之间用英文逗号隔开''',
-  `idx_table_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name_UNIQUE` (`uk_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='对数据库所有表的权限管理';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `authority`
---
-
-LOCK TABLES `authority` WRITE;
-/*!40000 ALTER TABLE `authority` DISABLE KEYS */;
-/*!40000 ALTER TABLE `authority` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `cptmp_role`
---
-
-DROP TABLE IF EXISTS `cptmp_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cptmp_role` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `idx_role_name` varchar(20) NOT NULL,
-  `authority_ids` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cptmp_role`
---
-
-LOCK TABLES `cptmp_role` WRITE;
-/*!40000 ALTER TABLE `cptmp_role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cptmp_role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `cptmp_user`
 --
 
@@ -89,10 +35,12 @@ CREATE TABLE `cptmp_user` (
   `phone_number` decimal(11,0) DEFAULT NULL,
   `gender` tinyint unsigned DEFAULT NULL,
   `avatar` varchar(200) DEFAULT NULL,
-  `idx_role_id` bigint unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_role_id_idx` (`idx_role_id`),
-  CONSTRAINT `user_role_id` FOREIGN KEY (`idx_role_id`) REFERENCES `cptmp_role` (`id`)
+  `idx_role_name` varchar(25) NOT NULL,
+  `enabled` tinyint NOT NULL,
+  `account_non_expired` tinyint NOT NULL,
+  `credentials_non_expired` tinyint NOT NULL,
+  `account_non_locked` tinyint NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -221,34 +169,6 @@ LOCK TABLES `test_tb` WRITE;
 INSERT INTO `test_tb` VALUES (3,'lgh'),(4,'JOJO');
 /*!40000 ALTER TABLE `test_tb` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `user_authority`
---
-
-DROP TABLE IF EXISTS `user_authority`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_authority` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `gmt_create` datetime NOT NULL,
-  `gmt_modified` datetime DEFAULT NULL,
-  `uk_user_id` bigint unsigned NOT NULL,
-  `authority_ids` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_id_UNIQUE` (`uk_user_id`),
-  CONSTRAINT `authority_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `cptmp_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户权限表，主要处理异常情况，剥夺某一用户的权限';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_authority`
---
-
-LOCK TABLES `user_authority` WRITE;
-/*!40000 ALTER TABLE `user_authority` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_authority` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -259,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-08 10:26:39
+-- Dump completed on 2020-07-08 11:22:56

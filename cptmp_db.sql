@@ -39,6 +39,26 @@ CREATE TABLE `activity_record` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `activity_record`
+--
+
+DROP TABLE IF EXISTS `train_team`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `train_team` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `gmt_create` datetime NOT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  `train_project_id` bigint unsigned NOT NULL,
+  `idx_team_name` varchar(100) NOT NULL,
+  `team_manager_id` bigint unsigned NOT NULL,
+  `code_base_url` Text NOT NULL,
+  `team_grade` decimal（5，2） NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `cptmp_user`
 --
 
@@ -89,6 +109,28 @@ CREATE TABLE `daily_record` (
   CONSTRAINT `daily_user_id` FOREIGN KEY (`idx_user_id`) REFERENCES `cptmp_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `train_project`
+--
+DROP TABLE IF EXISTS `train_project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `train_project` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `gmt_create` datetime NOT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  `uk_project_name` varchar(100) NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `finish_date` datetime DEFAULT NULL,
+  `content` Text NOT NULL,
+  `accept_standard` Text NOT NULL,
+  `resource_library` Text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uk_project_name` (`uk_project_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `enterprise_admin`

@@ -106,9 +106,8 @@ CREATE TABLE `enterprise_admin` (
   `gmt_modified` datetime DEFAULT NULL,
   `idx_name` varchar(20) NOT NULL,
   `uk_user_id` bigint unsigned NOT NULL,
-  `uk_employee_id` bigint NOT NULL,
+  `idx_employee_id` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_employee_id` (`uk_employee_id`),
   UNIQUE KEY `uk_user_id` (`uk_user_id`),
   CONSTRAINT `enterprise_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `cptmp_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -147,11 +146,10 @@ CREATE TABLE `school_instructor` (
   `gmt_modified` datetime DEFAULT NULL,
   `idx_name` varchar(20) NOT NULL,
   `uk_user_id` bigint unsigned NOT NULL,
-  `uk_employee_id` bigint DEFAULT NULL,
+  `idx_employee_id` varchar(50) DEFAULT NULL,
   `idx_school_name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  UNIQUE KEY `uk_employee_id` (`uk_employee_id`),
   CONSTRAINT `teacher_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `cptmp_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -170,11 +168,11 @@ CREATE TABLE `school_student` (
   `idx_name` varchar(20) NOT NULL,
   `idx_school_name` varchar(20) NOT NULL,
   `uk_user_id` bigint unsigned NOT NULL,
-  `uk_student_id` bigint DEFAULT NULL,
+  `idx_student_id` varchar(50) NOT NULL,
   `uk_student_face` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_user_id` (`uk_user_id`),
-  UNIQUE KEY `uk_student_id` (`uk_student_id`),
+  UNIQUE KEY `uk_student_face_UNIQUE` (`uk_student_face`),
   CONSTRAINT `stu_user_id` FOREIGN KEY (`uk_user_id`) REFERENCES `cptmp_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -244,4 +242,4 @@ CREATE TABLE `train_team` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-09 20:03:21
+-- Dump completed on 2020-07-09 22:03:20

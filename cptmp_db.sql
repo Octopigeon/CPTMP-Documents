@@ -18,6 +18,27 @@ USE `cptmp_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `activity_record`
+--
+
+DROP TABLE IF EXISTS `activity_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `activity_record` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `gmt_create` datetime NOT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  `idx_user_id` bigint unsigned NOT NULL,
+  `idx_team_id` bigint unsigned NOT NULL,
+  `state_record` int unsigned NOT NULL,
+  `event_record` varchar(2000) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `activity_user_id_idx` (`idx_user_id`),
+  CONSTRAINT `activity_user_id` FOREIGN KEY (`idx_user_id`) REFERENCES `cptmp_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `cptmp_user`
 --
 
@@ -40,7 +61,32 @@ CREATE TABLE `cptmp_user` (
   `account_non_expired` tinyint NOT NULL,
   `credentials_non_expired` tinyint NOT NULL,
   `account_non_locked` tinyint NOT NULL,
-  PRIMARY KEY (`id`)
+  `invitation_code` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `invitation_code_UNIQUE` (`invitation_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `daily_record`
+--
+
+DROP TABLE IF EXISTS `daily_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `daily_record` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `gmt_create` datetime NOT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  `idx_user_id` bigint unsigned NOT NULL,
+  `idx_team_id` bigint unsigned NOT NULL,
+  `document_path` varchar(200) NOT NULL,
+  `record_type` int unsigned NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `daily_user_id_idx` (`idx_user_id`),
+  CONSTRAINT `daily_user_id` FOREIGN KEY (`idx_user_id`) REFERENCES `cptmp_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,4 +179,4 @@ CREATE TABLE `test_tb` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-08 14:30:05
+-- Dump completed on 2020-07-09 10:37:03

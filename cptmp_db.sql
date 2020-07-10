@@ -99,7 +99,7 @@ create table school_instructor
     gmt_modified    datetime        null,
     idx_name        varchar(20)     not null,
     uk_user_id      bigint unsigned not null,
-    idx_employee_id varchar(50)     null,
+    idx_employee_id varchar(50)     not null,
     idx_school_name varchar(20)     not null,
     constraint uk_user_id
         unique (uk_user_id),
@@ -130,14 +130,14 @@ create table train_project
 (
     id               bigint unsigned auto_increment
         primary key,
-    gmt_create       datetime     not null,
-    gmt_modified     datetime     null,
-    uk_project_name  varchar(100) not null,
-    start_date       datetime     null,
-    finish_date      datetime     null,
-    content          text         not null,
-    accept_standard  text         not null,
-    resource_library text         not null
+    gmt_create       datetime      not null,
+    gmt_modified     datetime      null,
+    uk_project_name  varchar(100)  not null,
+    start_date       datetime      null,
+    finish_date      datetime      null,
+    content          varchar(5000) not null,
+    accept_standard  varchar(5000) not null,
+    resource_library varchar(5000) not null
 );
 
 create index uk_project_name

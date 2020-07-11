@@ -1,5 +1,9 @@
 unlock tables;
 
+use cptmp_db;
+
+unlock tables;
+
 drop table if exists activity_record;
 
 drop table if exists daily_record;
@@ -18,11 +22,11 @@ drop table if exists cptmp_user;
 
 drop table if exists test_tb;
 
-drop table if exists train;
+drop table if exists train_team;
 
 drop table if exists train_project;
 
-drop table if exists train_team;
+drop table if exists train;
 
 
 
@@ -60,7 +64,7 @@ CREATE TABLE enterprise_admin (
   idx_employee_id varchar(50) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uk_user_id (uk_user_id),
-  CONSTRAINT enterprise_user_id FOREIGN KEY (uk_user_id) REFERENCES cptmp_user (id)
+  CONSTRAINT enterprise_user_id FOREIGN KEY (uk_user_id) REFERENCES cptmp_user (id) on delete cascade on update cascade
 ) ;
 
 
@@ -74,7 +78,7 @@ CREATE TABLE password_reset_token (
   PRIMARY KEY (id),
   UNIQUE KEY token (token),
   KEY password_reset_email (idx_email),
-  CONSTRAINT password_reset_email FOREIGN KEY (idx_email) REFERENCES cptmp_user (uk_email)
+  CONSTRAINT password_reset_email FOREIGN KEY (idx_email) REFERENCES cptmp_user (uk_email) on delete cascade on update cascade
 ) ;
 
 
@@ -89,7 +93,7 @@ CREATE TABLE school_instructor (
   idx_school_name varchar(20) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uk_user_id (uk_user_id),
-  CONSTRAINT teacher_user_id FOREIGN KEY (uk_user_id) REFERENCES cptmp_user (id)
+  CONSTRAINT teacher_user_id FOREIGN KEY (uk_user_id) REFERENCES cptmp_user (id) on delete cascade on update cascade
 ) ;
 
 
@@ -106,41 +110,13 @@ CREATE TABLE school_student (
   PRIMARY KEY (id),
   UNIQUE KEY uk_user_id (uk_user_id),
   UNIQUE KEY uk_student_face_UNIQUE (uk_student_face),
-  CONSTRAINT stu_user_id FOREIGN KEY (uk_user_id) REFERENCES cptmp_user (id)
+  CONSTRAINT stu_user_id FOREIGN KEY (uk_user_id) REFERENCES cptmp_user (id) on delete cascade on update cascade
 ) ;
 
 
-create table if not exists daily_record
-(
-    id            bigint unsigned auto_increment
-        primary key,
-    gmt_create    datetime        not null,
-    gmt_modified  datetime        null,
-    idx_user_id   bigint unsigned not null,
-    idx_team_id   bigint unsigned not null,
-    document_path varchar(200)    not null,
-    record_type   int unsigned    not null,
-    title         varchar(100)    not null,
-    content       text            not null,
-    CONSTRAINT daily_user_id FOREIGN KEY (idx_user_id) REFERENCES cptmp_user (id),
-    CONSTRAINT daily_team_id FOREIGN KEY (idx_team_id) REFERENCES train_team (id)
-);
 
 
 
-
-
-
-
-
-
-create table if not exists test_tb
-(
-    id          int unsigned auto_increment
-        primary key,
-    pigeon_name varchar(20) not null
-)
-    charset = utf8;
 
 create table if not exists train
 (
@@ -169,7 +145,7 @@ create table if not exists train_project
     project_content  varchar(5000)    not null,
     resource_library varchar(5000)    not null,
     UNIQUE KEY uk_project_name (uk_project_name),
-    CONSTRAINT train_and_project_id FOREIGN KEY (idx_train_id) REFERENCES train (id)
+    CONSTRAINT train_and_project_id FOREIGN KEY (idx_train_id) REFERENCES train (id) on delete cascade on update cascade
 );
 
 CREATE TABLE if not exists train_team (
@@ -183,7 +159,7 @@ CREATE TABLE if not exists train_team (
   idx_po_user_id bigint unsigned NOT NULL,
   code_base_url Text NOT NULL,
   team_grade decimal(5,2) NOT NULL,
-  CONSTRAINT project_and_team_id FOREIGN KEY (idx_train_project_id) REFERENCES train_project (id),
+  CONSTRAINT project_and_team_id FOREIGN KEY (idx_train_project_id) REFERENCES train_project (id) on delete cascade on update cascade,
   PRIMARY KEY (`id`)
 );
 create table if not exists activity_record
@@ -197,11 +173,26 @@ create table if not exists activity_record
     state_record int unsigned    not null,
     event_record varchar(2000)   not null,
     constraint activity_user_id
-        foreign key (idx_user_id) references cptmp_user (id),
-	constraint activity_team_id
-        foreign key (idx_team_id) references train_team (id)
+        foreign key (idx_user_id) references cptmp_user (id) on delete cascade on update cascade,
+	constraint activity_team_id 
+        foreign key (idx_team_id) references train_team (id) on delete cascade on update cascade
 );
 
+create table if not exists daily_record
+(
+    id            bigint unsigned auto_increment
+        primary key,
+    gmt_create    datetime        not null,
+    gmt_modified  datetime        null,
+    idx_user_id   bigint unsigned not null,
+    idx_team_id   bigint unsigned not null,
+    document_path varchar(200)    not null,
+    record_type   int unsigned    not null,
+    title         varchar(100)    not null,
+    content       text            not null,
+    CONSTRAINT daily_user_id FOREIGN KEY (idx_user_id) REFERENCES cptmp_user (id) on delete cascade on update cascade ,
+    CONSTRAINT daily_team_id FOREIGN KEY (idx_team_id) REFERENCES train_team (id) on delete cascade on update cascade
+);
 
 CREATE TABLE attachment_file (
   id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -219,7 +210,7 @@ CREATE TABLE attachment_file (
   UNIQUE KEY uk_file_path_UNIQUE (uk_file_path),
   KEY file_user_id_idx (idx_user_id),
   KEY file_team_id_idx (idx_team_id),
-  CONSTRAINT file_team_id FOREIGN KEY (idx_team_id) REFERENCES train_team (id),
-  CONSTRAINT file_user_id FOREIGN KEY (idx_user_id) REFERENCES cptmp_user (id)
+  CONSTRAINT file_team_id FOREIGN KEY (idx_team_id) REFERENCES train_team (id) on delete cascade on update cascade,
+  CONSTRAINT file_user_id FOREIGN KEY (idx_user_id) REFERENCES cptmp_user (id) on delete cascade on update cascade
 );
 

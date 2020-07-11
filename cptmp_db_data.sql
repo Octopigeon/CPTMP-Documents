@@ -4,71 +4,80 @@
 -- ------------------------------------------------------
 -- Server version	8.0.19
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
 
 --
--- Dumping data for table `cptmp_user`
+-- Dumping data for table `cptmpuser_user`
 --
-
-LOCK TABLES `cptmp_user` WRITE;
-/*!40000 ALTER TABLE `cptmp_user` DISABLE KEYS */;
-INSERT INTO `cptmp_user` VALUES (3,'2020-07-08 13:27:10',NULL,'123','rea',NULL,'1290959722@qq.com',NULL,NULL,NULL,'ROLE_ENTERPRISE_ADMIN',1,1,1,1),(4,'2020-07-08 13:29:10',NULL,'123','rsa',NULL,'123@qq.com',NULL,NULL,NULL,'ROLE_SCHOOL_ADMIN',1,1,1,1),(5,'2020-07-08 13:29:10',NULL,'123','rst',NULL,'234@qq.com',NULL,NULL,NULL,'ROLE_SCHOOL_TEACHER',1,1,1,1),(6,'2020-07-08 13:29:10',NULL,'123','rsm',NULL,'345@qq.com',NULL,NULL,NULL,'ROLE_STUDENT_MEMBER',1,1,1,1),(7,'2020-07-08 13:29:10',NULL,'123','rsma',NULL,'456@qq.com',NULL,NULL,NULL,'ROLE_STUDENT_MASTER',1,1,1,1),(8,'2020-07-08 13:29:10',NULL,'123','rsp',NULL,'567@qq.com',NULL,NULL,NULL,'ROLE_STUDENT_PM',1,1,1,1),(9,'2020-07-08 13:29:10',NULL,'123','rspo',NULL,'678@qq.com',NULL,NULL,NULL,'ROLE_STUDENT_PO',1,1,1,1);
-/*!40000 ALTER TABLE `cptmp_user` ENABLE KEYS */;
+use cptmp_db;
+unlock tables;
+LOCK TABLES cptmp_user WRITE;
+INSERT IGNORE INTO cptmp_user VALUES 
+(1,'2020-07-08 13:27:10',NULL,'test1','test1',"test1",NULL,'test1',NULL,NULL,NULL,'test1',1,1,1,1,NULL),
+(2,'2020-07-08 13:27:10',NULL,'test2','test2',"test2",NULL,'test2',NULL,NULL,NULL,'test2',2,2,2,2,NULL);
 UNLOCK TABLES;
+
 
 --
 -- Dumping data for table `enterprise_admin`
 --
 
-LOCK TABLES `enterprise_admin` WRITE;
-/*!40000 ALTER TABLE `enterprise_admin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `enterprise_admin` ENABLE KEYS */;
+LOCK TABLES enterprise_admin WRITE;
+
 UNLOCK TABLES;
 
 --
 -- Dumping data for table `school_instructor`
 --
 
-LOCK TABLES `school_instructor` WRITE;
-/*!40000 ALTER TABLE `school_instructor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `school_instructor` ENABLE KEYS */;
+LOCK TABLES school_instructor WRITE;
+
 UNLOCK TABLES;
 
 --
 -- Dumping data for table `school_student`
 --
 
-LOCK TABLES `school_student` WRITE;
-/*!40000 ALTER TABLE `school_student` DISABLE KEYS */;
-/*!40000 ALTER TABLE `school_student` ENABLE KEYS */;
+LOCK TABLES school_student WRITE;
+
 UNLOCK TABLES;
 
 --
 -- Dumping data for table `test_tb`
 --
 
-LOCK TABLES `test_tb` WRITE;
-/*!40000 ALTER TABLE `test_tb` DISABLE KEYS */;
-INSERT INTO `test_tb` VALUES (3,'lgh'),(4,'JOJO');
-/*!40000 ALTER TABLE `test_tb` ENABLE KEYS */;
+
+
+LOCK TABLES train WRITE;
+INSERT IGNORE INTO train VALUES 
+(1,'2020-07-08 13:27:10',NULL,1,1,'2020-07-08 13:27:10','2020-07-08 13:27:10',"test1","test1","test1"),
+(2,'2020-07-08 13:27:10',NULL,2,2,'2020-07-08 13:27:10','2020-07-08 13:27:10',"test2","test2","test2");
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-08 14:28:01
+LOCK TABLES train_project WRITE;
+INSERT IGNORE INTO train_project VALUES 
+(1,'2020-07-08 13:27:10',NULL,1,"test1",1,"test1","test1"),
+(2,'2020-07-08 13:27:10',NULL,2,"test2",2,"test2","test2");
+UNLOCK TABLES;
+
+
+LOCK TABLES train_team WRITE;
+INSERT IGNORE INTO train_team VALUES 
+(1,'2020-07-08 13:27:10',NULL,1,"test1",1,1,1,"test1",100.0),
+(2,'2020-07-08 13:27:10',NULL,2,"test2",2,2,2,"test2",100.0);
+UNLOCK TABLES;
+
+LOCK TABLES daily_record WRITE;
+INSERT IGNORE INTO daily_record VALUES 
+(1,'2020-07-08 13:27:10',NULL,1,1,"test1",1,'test1',"test1"),
+(2,'2020-07-08 13:27:10',NULL,2,2,"test2",2,'test2',"test2");
+UNLOCK TABLES;
+
+LOCK TABLES activity_record WRITE;
+INSERT IGNORE INTO activity_record VALUES 
+(1,'2020-07-08 13:27:10',NULL,1,1,1,'test1'),
+(2,'2020-07-08 13:27:10',NULL,2,2,2,'test2');
+UNLOCK TABLES;
+
+

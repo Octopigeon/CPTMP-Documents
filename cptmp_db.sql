@@ -44,6 +44,7 @@ create table if not exists cptmp_organization
     gmt_modified             datetime      null,
     gmt_deleted              datetime      null,
     uk_organization_name     varchar(45)   not null,
+    uk_real_name             varchar(45)   not null,
     organization_description varchar(5000) null,
     official_website_url     varchar(200)  null,
     invitation_code          varchar(200)  null,
@@ -203,6 +204,4 @@ create table if not exists daily_record
         foreign key (idx_user_id) references cptmp_user (id)
             on update cascade on delete cascade
 );
-
-
 

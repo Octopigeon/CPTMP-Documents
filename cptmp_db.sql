@@ -4,11 +4,11 @@ drop table if exists attachment_file;
 
 drop table if exists daily_record;
 
-drop table if exists password_reset_token;
-
 drop table if exists cptmp_user;
 
 drop table if exists cptmp_organization;
+
+drop table if exists password_reset_token;
 
 drop table if exists student_team;
 
@@ -64,7 +64,7 @@ create table if not exists cptmp_user
     idx_password            varchar(128)     not null,
     uk_username             varchar(200)     not null,
     introduction            text             null,
-    uk_email                varchar(200)     not null,
+    uk_email                varchar(200)     null,
     phone_number            decimal(11)      null,
     gender                  tinyint unsigned null,
     avatar                  varchar(200)     null,
@@ -76,6 +76,8 @@ create table if not exists cptmp_user
     account_non_expired     tinyint          not null,
     credentials_non_expired tinyint          not null,
     account_non_locked      tinyint          not null,
+    constraint uk_email
+        unique (uk_email),
     constraint uk_email_UNIQUE
         unique (uk_email),
     constraint uk_username_UNIQUE
@@ -95,10 +97,7 @@ create table if not exists password_reset_token
     uk_token     varchar(128) not null,
     idx_email    varchar(200) not null,
     constraint uk_token
-        unique (uk_token),
-    constraint password_reset_email
-        foreign key (idx_email) references cptmp_user (uk_email)
-            on update cascade on delete cascade
+        unique (uk_token)
 );
 
 create table if not exists student_team

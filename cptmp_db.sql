@@ -10,7 +10,11 @@ drop table if exists event;
 
 drop table if exists password_reset_token;
 
-drop table if exists process;
+drop table if exists process_event;
+
+drop table if exists cptmp_event;
+
+drop table if exists cptmp_process;
 
 drop table if exists student_team;
 
@@ -21,7 +25,6 @@ drop table if exists train_project;
 drop table if exists train;
 
 drop table if exists cptmp_organization;
-
 
 create table if not exists attachment_file
 (
@@ -39,6 +42,19 @@ create table if not exists attachment_file
         unique (uk_file_name),
     constraint uk_file_path_UNIQUE
         unique (uk_file_path)
+);
+
+create table if not exists cptmp_event
+(
+    id             bigint unsigned auto_increment
+        primary key,
+    gmt_create     datetime         not null,
+    gmt_modified   datetime         null,
+    gmt_deleted    datetime         null,
+    start_time     datetime         not null,
+    end_time       datetime         not null,
+    content        varchar(5000)    not null,
+    person_or_team tinyint unsigned not null
 );
 
 create table if not exists cptmp_organization
@@ -150,7 +166,7 @@ create table if not exists train
             on update cascade on delete cascade
 );
 
-create table if not exists process
+create table if not exists cptmp_process
 (
     id           bigint unsigned auto_increment
         primary key,
@@ -162,6 +178,23 @@ create table if not exists process
     end_time     datetime        not null,
     constraint process_and_train
         foreign key (train_id) references train (id)
+            on update cascade on delete cascade
+);
+
+create table if not exists process_event
+(
+    id           bigint unsigned auto_increment
+        primary key,
+    gmt_create   datetime        not null,
+    gmt_modified datetime        null,
+    gmt_deleted  datetime        null,
+    process_id   bigint unsigned not null,
+    event_id     bigint unsigned not null,
+    constraint process_event_and_event
+        foreign key (event_id) references cptmp_event (id)
+            on update cascade on delete cascade,
+    constraint process_event_and_process
+        foreign key (process_id) references cptmp_process (id)
             on update cascade on delete cascade
 );
 

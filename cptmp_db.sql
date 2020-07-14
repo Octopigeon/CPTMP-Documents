@@ -1,3 +1,7 @@
+use cptmp_db;
+
+unlock tables;
+
 drop table if exists activity_record;
 
 drop table if exists attachment_file;
@@ -135,14 +139,10 @@ create table if not exists train_project
     gmt_create       datetime          not null,
     gmt_modified     datetime          null,
     gmt_deleted      datetime          null,
-    idx_train_id     bigint unsigned   not null,
-    idx_project_name varchar(100)      not null,
+    idx_name varchar(100)      not null,
     project_level    smallint unsigned not null,
     project_content  varchar(5000)     not null,
-    resource_library varchar(5000)     not null,
-    constraint train_and_project_id
-        foreign key (idx_train_id) references train (id)
-            on update cascade on delete cascade
+    resource_library varchar(5000)     not null
 );
 
 create table if not exists train_team

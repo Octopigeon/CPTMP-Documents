@@ -26,8 +26,8 @@ UNLOCK TABLES;
 
 LOCK TABLES cptmp_user WRITE;
 INSERT INTO cptmp_user VALUES 
-(1,'2020-07-08 13:27:10',NULL,NULL,'test1','test1',NULL,NULL,NULL,NULL,NULL,'test1','test1',1,'test1',1,1,1,1),
-(2,'2020-07-08 13:27:10',NULL,NULL,'test2','test2',NULL,NULL,NULL,NULL,NULL,'test2','test2',2,'test2',2,2,2,2);
+(1,'2020-07-08 13:27:10',NULL,NULL,'test1','test1',NULL,NULL,NULL,NULL,'test1','test1',1,'test1',1,1,1,1),
+(2,'2020-07-08 13:27:10',NULL,NULL,'test2','test2',NULL,NULL,NULL,NULL,'test2','test2',2,'test2',2,2,2,2);
 UNLOCK TABLES;
 
 LOCK TABLES password_reset_token WRITE;
@@ -40,20 +40,20 @@ UNLOCK TABLES;
 
 LOCK TABLES train WRITE;
 INSERT INTO train VALUES 
-(1,'2020-07-08 13:27:10',NULL,NULL,1,1,'2020-07-08 13:27:10','2020-07-08 13:27:10',"test1","test1","test1"),
-(2,'2020-07-08 13:27:10',NULL,NULL,2,2,'2020-07-08 13:27:10','2020-07-08 13:27:10',"test2","test2","test2");
+(1,'2020-07-08 13:27:10',NULL,NULL,'test1',1,'2020-07-08 13:27:10','2020-07-08 13:27:10',"test1","test1","test1","test1"),
+(2,'2020-07-08 13:27:10',NULL,NULL,'test2',2,'2020-07-08 13:27:10','2020-07-08 13:27:10',"test2","test2","test2","test2");
 UNLOCK TABLES;
 
 
-LOCK TABLES train_project WRITE;
-INSERT INTO train_project VALUES 
+LOCK TABLES project WRITE;
+INSERT INTO project VALUES 
 (1,'2020-07-08 13:27:10',NULL,NULL,"test1",1,"test1","test1"),
 (2,'2020-07-08 13:27:10',NULL,NULL,"test2",2,"test2","test2");
 UNLOCK TABLES;
 
 
-LOCK TABLES train_team WRITE;
-INSERT INTO train_team VALUES 
+LOCK TABLES team WRITE;
+INSERT INTO team VALUES 
 (1,'2020-07-08 13:27:10',NULL,NULL,1,"test1",1,1,1,"test1",100.0),
 (2,'2020-07-08 13:27:10',NULL,NULL,2,"test2",2,2,2,"test2",100.0);
 UNLOCK TABLES;
@@ -64,8 +64,8 @@ INSERT INTO daily_record VALUES
 (2,'2020-07-08 13:27:10',NULL,NULL,2,2,"test2",2,'test2',"test2");
 UNLOCK TABLES;
 
-LOCK TABLES activity_record WRITE;
-INSERT INTO activity_record VALUES 
+LOCK TABLES record WRITE;
+INSERT INTO record VALUES 
 (1,'2020-07-08 13:27:10',NULL,NULL,1,1,1,'test1'),
 (2,'2020-07-08 13:27:10',NULL,NULL,2,2,2,'test2');
 UNLOCK TABLES;
@@ -74,6 +74,12 @@ LOCK TABLES student_team WRITE;
 INSERT INTO student_team VALUES 
 (1,'2020-07-08 13:27:10',NULL,NULL,1,1,1),
 (2,'2020-07-08 13:27:10',NULL,NULL,2,2,2);
+UNLOCK TABLES;
+
+LOCK TABLES token WRITE;
+INSERT INTO token VALUES 
+(1,'2020-07-08 13:27:10',NULL,NULL,'test1','test1'),
+(2,'2020-07-08 13:27:10',NULL,NULL,'test2','test2');
 UNLOCK TABLES;
 
 

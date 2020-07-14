@@ -16,12 +16,13 @@ drop table if exists password_reset_token;
 
 drop table if exists student_team;
 
-drop table if exists train_team;
+drop table if exists team;
 
-drop table if exists train_project;
+drop table if exists project;
 
 drop table if exists train;
 
+drop table if exists token;
 create table if not exists attachment_file
 (
     id            bigint unsigned auto_increment
@@ -47,7 +48,7 @@ create table if not exists cptmp_organization
     gmt_create               datetime      not null,
     gmt_modified             datetime      null,
     gmt_deleted              datetime      null,
-    uk_organization_name     varchar(45)   not null,
+    uk_name     varchar(45)   not null,
     uk_real_name             varchar(45)   not null,
     organization_description varchar(5000) null,
     official_website_url     varchar(200)  null,
@@ -55,7 +56,7 @@ create table if not exists cptmp_organization
     constraint invitation_code_UNIQUE
         unique (invitation_code),
     constraint uk_name_UNIQUE
-        unique (uk_organization_name)
+        unique (uk_name)
 );
 
 create table if not exists cptmp_user
@@ -67,7 +68,6 @@ create table if not exists cptmp_user
     gmt_deleted             datetime         null,
     idx_password            varchar(128)     not null,
     uk_username             varchar(200)     not null,
-    introduction            text             null,
     uk_email                varchar(200)     null,
     phone_number            decimal(11)      null,
     gender                  tinyint unsigned null,
@@ -123,16 +123,19 @@ create table if not exists train
     gmt_create       datetime        not null,
     gmt_modified     datetime        null,
     gmt_deleted      datetime        null,
-    school_id        bigint unsigned not null,
-    process_id       bigint unsigned not null,
+    uk_name 		 varchar(100)    not null,
+    organization_id        bigint unsigned not null,
     start_date       datetime        null,
     finish_date      datetime        null,
     content          varchar(5000)   not null,
-    accept_standard  varchar(3000)   not null,
-    resource_library varchar(5000)   not null
+    standard  varchar(3000)   not null,
+    resource_library varchar(3000)   not null,
+    gps_info		 varchar(3000)   not null,
+     constraint uk_name
+        unique (uk_name)
 );
 
-create table if not exists train_project
+create table if not exists project
 (
     id               bigint unsigned auto_increment
         primary key,
@@ -145,7 +148,7 @@ create table if not exists train_project
     resource_library varchar(5000)     not null
 );
 
-create table if not exists train_team
+create table if not exists team
 (
     id                   bigint unsigned auto_increment
         primary key,
@@ -160,7 +163,7 @@ create table if not exists train_team
     code_base_url        text            not null,
     team_grade           decimal(5, 2)   not null,
     constraint project_and_team_id
-        foreign key (idx_train_project_id) references train_project (id)
+        foreign key (idx_train_project_id) references project (id)
             on update cascade on delete cascade
 );
 
@@ -176,7 +179,7 @@ create table if not exists activity_record
     state_record int unsigned    not null,
     event_record varchar(2000)   not null,
     constraint activity_team_id
-        foreign key (idx_team_id) references train_team (id)
+        foreign key (idx_team_id) references team (id)
             on update cascade on delete cascade,
     constraint activity_user_id
         foreign key (idx_user_id) references cptmp_user (id)
@@ -197,10 +200,21 @@ create table if not exists daily_record
     title         varchar(100)    not null,
     content       text            not null,
     constraint daily_team_id
-        foreign key (idx_team_id) references train_team (id)
+        foreign key (idx_team_id) references team (id)
             on update cascade on delete cascade,
     constraint daily_user_id
         foreign key (idx_user_id) references cptmp_user (id)
             on update cascade on delete cascade
+);
+
+create table if not exists token
+(
+    id            bigint unsigned auto_increment
+        primary key,
+    gmt_create    datetime        not null,
+    gmt_modified  datetime        null,
+    gmt_deleted   datetime        null,
+    token  		  varchar(100)    not null,
+    email   	  varchar(100)	  not null
 );
 

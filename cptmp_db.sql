@@ -4,8 +4,6 @@ drop table if exists attachment_file;
 
 drop table if exists daily_record;
 
-drop table if exists cptmp_user;
-
 drop table if exists event;
 
 drop table if exists password_reset_token;
@@ -17,6 +15,10 @@ drop table if exists cptmp_event;
 drop table if exists cptmp_process;
 
 drop table if exists student_team;
+
+drop table if exists team_person;
+
+drop table if exists cptmp_user;
 
 drop table if exists train_team;
 
@@ -219,16 +221,15 @@ create table if not exists train_team
 (
     id                   bigint unsigned auto_increment
         primary key,
-    gmt_create           datetime        not null,
-    gmt_modified         datetime        null,
-    gmt_deleted          datetime        null,
-    idx_train_project_id bigint unsigned not null,
-    idx_team_name        varchar(100)    not null,
-    idx_master_user_id   bigint unsigned not null,
-    idx_pm_user_id       bigint unsigned not null,
-    idx_po_user_id       bigint unsigned not null,
-    code_base_url        text            not null,
-    team_grade           decimal(5, 2)   not null,
+    gmt_create           datetime          not null,
+    gmt_modified         datetime          null,
+    gmt_deleted          datetime          null,
+    idx_train_project_id bigint unsigned   not null,
+    idx_team_name        varchar(100)      not null,
+    team_grade           smallint unsigned not null,
+    avatar               varchar(200)      null,
+    repo_url             varchar(200)      null,
+    evaluation           varchar(5000)     null,
     constraint project_and_team_id
         foreign key (idx_train_project_id) references train_project (id)
             on update cascade on delete cascade
@@ -271,6 +272,25 @@ create table if not exists daily_record
             on update cascade on delete cascade,
     constraint daily_user_id
         foreign key (idx_user_id) references cptmp_user (id)
+            on update cascade on delete cascade
+);
+
+create table if not exists team_person
+(
+    id             bigint unsigned auto_increment
+        primary key,
+    gmt_create     datetime          not null,
+    gmt_modified   datetime          null,
+    gmt_deleted    datetime          null,
+    team_id        bigint unsigned   not null,
+    user_id        bigint unsigned   not null,
+    personal_grade smallint unsigned not null,
+    evaluation     varchar(5000)     null,
+    constraint team_person_and_team
+        foreign key (team_id) references train_team (id)
+            on update cascade on delete cascade,
+    constraint team_person_and_user
+        foreign key (user_id) references cptmp_user (id)
             on update cascade on delete cascade
 );
 

@@ -6,6 +6,8 @@ drop table if exists daily_record;
 
 drop table if exists cptmp_user;
 
+drop table if exists event;
+
 drop table if exists password_reset_token;
 
 drop table if exists process;
@@ -19,6 +21,7 @@ drop table if exists train_project;
 drop table if exists train;
 
 drop table if exists cptmp_organization;
+
 
 create table if not exists attachment_file
 (
@@ -87,6 +90,19 @@ create table if not exists cptmp_user
     constraint user_organization_id
         foreign key (idx_organization_id) references cptmp_organization (id)
             on update cascade on delete cascade
+);
+
+create table if not exists event
+(
+    id             bigint unsigned auto_increment
+        primary key,
+    gmt_create     datetime         not null,
+    gmt_modified   datetime         null,
+    gmt_deleted    datetime         null,
+    start_time     datetime         not null,
+    end_time       datetime         not null,
+    content        varchar(5000)    not null,
+    person_or_team tinyint unsigned not null
 );
 
 create table if not exists password_reset_token

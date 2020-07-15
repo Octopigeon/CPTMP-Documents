@@ -1,12 +1,14 @@
-drop table if exists attachment_file;
+use cptmp_db;
 
-drop table if exists password_reset_token;
-
-drop table if exists personal_grade;
+unlock tables;
 
 drop table if exists record;
 
+drop table if exists attachment_file;
+
 drop table if exists assignment;
+
+drop table if exists password_reset_token;
 
 drop table if exists process_event;
 
@@ -14,11 +16,13 @@ drop table if exists cptmp_event;
 
 drop table if exists cptmp_process;
 
+drop table if exists personal_grade;
+
 drop table if exists team_person;
 
-drop table if exists cptmp_user;
-
 drop table if exists team;
+
+drop table if exists cptmp_user;
 
 drop table if exists project_train;
 
@@ -29,18 +33,7 @@ drop table if exists cptmp_organization;
 drop table if exists train_project;
 
 
-create table if not exists assignment
-(
-    id            bigint unsigned auto_increment
-        primary key,
-    gmt_create    datetime     not null,
-    gmt_modified  datetime     null,
-    gmt_deleted   datetime     null,
-    document_path varchar(200) not null,
-    is_file       tinyint(1)   not null,
-    title         varchar(100) not null,
-    content       text         not null
-);
+
 
 create table if not exists attachment_file
 (
@@ -50,14 +43,17 @@ create table if not exists attachment_file
     gmt_modified  datetime     null,
     gmt_deleted   datetime     null,
     uk_file_name  varchar(200) not null,
+    uk_file_url  varchar(200) not null,
     uk_file_path  varchar(500) not null,
     origin_name   varchar(200) not null,
     file_size     bigint       not null,
-    idx_file_type varchar(100) not null,
+    idx_file_type varchar(100)  not null,
     constraint uk_file_name_UNIQUE
         unique (uk_file_name),
     constraint uk_file_path_UNIQUE
-        unique (uk_file_path)
+        unique (uk_file_path),
+        constraint uk_file_url_UNIQUE
+        unique (uk_file_url)
 );
 
 create table if not exists cptmp_event
@@ -234,35 +230,52 @@ create table if not exists team
     uk_project_train_id bigint unsigned   not null,
     constraint team_ibfk_1
         foreign key (uk_project_train_id) references project_train (id)
-            on update cascade on delete cascade
+            on update cascade on delete cascade,
+	constraint uk_project_train_id
+		unique(uk_project_train_id)
+);
+
+
+
+create table if not exists assignment
+(
+    id            bigint unsigned auto_increment
+        primary key,
+    gmt_create    datetime        not null,
+    gmt_modified  datetime        null,
+    gmt_deleted   datetime        null,
+    document_path varchar(200)    not null,
+    is_file   	  boolean    not null,
+    title         varchar(100)    not null,
+    content       text            not null
 );
 
 create table if not exists record
 (
-    id                   bigint unsigned auto_increment
+    id           bigint unsigned auto_increment
         primary key,
-    gmt_create           datetime        not null,
-    gmt_modified         datetime        null,
-    gmt_deleted          datetime        null,
-    idx_user_id          bigint unsigned not null,
-    idx_team_id          bigint unsigned not null,
-    idx_train_id         bigint unsigned not null,
-    idx_process_event_id bigint unsigned not null,
-    idx_assignment_id    bigint unsigned not null,
-    constraint record_assignment_id
-        foreign key (idx_assignment_id) references assignment (id)
+    gmt_create   datetime        not null,
+    gmt_modified datetime        null,
+    gmt_deleted  datetime        null,
+    idx_user_id  bigint unsigned not null,
+    idx_team_id  bigint unsigned not null,
+    idx_train_id  bigint unsigned not null,
+    idx_process_event_id  bigint unsigned not null,
+    idx_assignment_id  bigint unsigned not null,
+    constraint record_team_id
+        foreign key (idx_team_id) references team (id)
+            on update cascade on delete cascade,
+    constraint record_user_id
+        foreign key (idx_user_id) references cptmp_user (id)
+            on update cascade on delete cascade,
+	constraint record_train_id
+        foreign key (idx_train_id) references train (id)
             on update cascade on delete cascade,
     constraint record_process_id
         foreign key (idx_process_event_id) references process_event (id)
             on update cascade on delete cascade,
-    constraint record_team_id
-        foreign key (idx_team_id) references team (id)
-            on update cascade on delete cascade,
-    constraint record_train_id
-        foreign key (idx_train_id) references train (id)
-            on update cascade on delete cascade,
-    constraint record_user_id
-        foreign key (idx_user_id) references cptmp_user (id)
+    constraint record_assignment_id
+        foreign key (idx_assignment_id) references assignment (id)
             on update cascade on delete cascade
 );
 
@@ -295,6 +308,7 @@ create table if not exists personal_grade
     evaluation        varchar(5000)     null,
     constraint personal_grade_team_person
         foreign key (uk_team_person_id) references team_person (id)
-            on update cascade on delete cascade
+            on update cascade on delete cascade,
+	constraint uk_team_person_id
+        unique (uk_team_person_id)
 );
-

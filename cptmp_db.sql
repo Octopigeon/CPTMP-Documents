@@ -2,6 +2,7 @@ use cptmp_db;
 
 unlock tables;
 
+
 drop table if exists record;
 
 drop table if exists attachment_file;
@@ -261,7 +262,7 @@ create table if not exists record
     idx_team_id  bigint unsigned not null,
     idx_train_id  bigint unsigned not null,
     idx_process_event_id  bigint unsigned not null,
-    idx_assignment_id  bigint unsigned not null,
+    assignments_lib  varchar(5000)  null,
     constraint record_team_id
         foreign key (idx_team_id) references team (id)
             on update cascade on delete cascade,
@@ -273,9 +274,6 @@ create table if not exists record
             on update cascade on delete cascade,
     constraint record_process_id
         foreign key (idx_process_event_id) references process_event (id)
-            on update cascade on delete cascade,
-    constraint record_assignment_id
-        foreign key (idx_assignment_id) references assignment (id)
             on update cascade on delete cascade
 );
 
@@ -304,7 +302,7 @@ create table if not exists personal_grade
     gmt_modified      datetime          null,
     gmt_deleted       datetime          null,
     uk_team_person_id bigint unsigned   not null,
-    personal_grade    smallint unsigned not null,
+    personal_grade    smallint unsigned null,
     evaluation        varchar(5000)     null,
     constraint personal_grade_team_person
         foreign key (uk_team_person_id) references team_person (id)
